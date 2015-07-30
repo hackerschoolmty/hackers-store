@@ -9,7 +9,7 @@ rails g scaffold product name:string description:text price:decimal stock:intege
 
 rails g scaffold order user_id:integer total:decimal status:integer token:string
 
-rails g scaffold order_items product_id:integer quantity:integer subtotal:decimal
+rails g scaffold order_items order_id:integer product_id:integer quantity:integer subtotal:decimal
 ```
 
 # steps:
