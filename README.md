@@ -34,7 +34,7 @@ User stories:
 
   - Como administrador puedo ver el listado de ordenes pendientes, pagadas, canceladas
 
-  - Como admin debgo recibir una notificación cada que alguien me hace una compra.
+  - Como admin debo recibir una notificación cada que alguien me hace una compra.
 
 
   - Como comprador al entrar al home de la página debo ver todos los productos.
@@ -51,4 +51,4 @@ User stories:
   - Como comprador puedo pagar mi compra.
 
   - Como comprador puedo cancelar mi compra.
-  
+
