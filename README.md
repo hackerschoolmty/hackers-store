@@ -24,3 +24,5 @@ rails g scaffold order_items order_id:integer product_id:integer quantity:intege
   - process payment with conekta.
   - Remove product_item from cart.
   - Send email to admin when user place order.
+
+
