@@ -1,4 +1,12 @@
 <%# add navigation links to this file %>
+<% if current_order %>
+<li>
+  <%= link_to order_path(current_order) do %>
+    Cart <span class="badge"><%= current_order.order_items.count %></span>
+  <% end %>
+</li>
+<% end %>
+
 <% if user_signed_in? %>
   <li><%= link_to 'Edit account', edit_user_registration_path %></li>
   <li><%= link_to 'Sign out', destroy_user_session_path, :method=>'delete' %></li>

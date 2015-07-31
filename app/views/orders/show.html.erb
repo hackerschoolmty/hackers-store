@@ -1,0 +1,52 @@
+<p id="notice"><%= notice %></p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Product</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @total = 0 %>
+    <% @order.order_items.each do |item| %>
+      <tr>
+        <td>
+          <%= item.quantity %>
+        </td>
+        <td>
+          <%= item.product.name %>
+
+        </td>
+        <td>
+          (<%= item.product.price %>)
+           <% item_sub = item.quantity * item.product.price %>
+           <%= number_to_currency item_sub %>
+        </td>
+      </tr>
+      <% @total += item_sub  %>
+    <% end %>
+    <tr>
+      <td colspan='2'>
+        Taxes
+      </td>
+      <td>
+        <% iva = (@total * 0.16).to_f %>
+        <%= iva %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan='2'></td>
+      <td><%= number_to_currency(@total + iva) %></td>
+    </tr>
+
+
+  </tbody>
+
+
+</table>
+
+
+
+<%= link_to 'Continue shoping', root_path %>

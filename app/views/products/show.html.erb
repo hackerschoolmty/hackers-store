@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-xs-3">
+    <%= image_tag 'http://placehold.it/350x150' %>
+
+    <% if user_signed_in? && current_user.has_role?(:admin) %>
+      <small>
+        <%= link_to 'Edit', edit_product_path(@product) %> |&nbsp;
+        <%= link_to 'Destroy', @product, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </small>
+    <% end %>
+
+
+  </div>
+  <div class="col-xs-9">
+    <h4><%= @product.name %></h4>
+    <p><%= @product.description %></p>
+    <h5><%= number_to_currency @product.price %></h5>
+    <%= '[In stock]' if @product.stock > 0 %>
+
+    <%= link_to 'Add to cart', add_product_orders_path(product_id: @product.id), method: :post, class: 'btn btn-large btn-success' %>
+
+    <div class="product-actions">
+      <%= link_to 'Back', products_path %> <br>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="product">
+
+  <% if user_signed_in? && current_user.has_role?(:admin) %>
+    <small>
+      <%= link_to 'Edit', edit_product_path(product) %> |&nbsp;
+      <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %>
+    </small>
+  <% end %>
+
+  <%= link_to product_path(product.slug) do %>
+    <%= image_tag 'http://placehold.it/350x150' %>
+    <h4><%= product.name %></h4>
+    <p><%= truncate product.description, length: 50, omission: 'read more…' %></p>
+    <h5><%= number_to_currency product.price %></h5>
+    <%= '[In stock]' if product.stock > 0 %>
+  <% end %>
+
+</div>

@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bienvenido a la tiendita</h1>
+
+<%= form_tag '', method: :get do %>
+  <%= text_field_tag 'q', params[:q], id: 'q' %>
+<% end %>
+
+<% if user_signed_in? && current_user.has_role?(:admin) %>
+  <%= link_to 'New Product', new_product_path, class: "btn btn-lg btn-default" %>
+  <br>
+<% end %>
+
+<div class="products-list">
+  <%= render partial: 'product', collection: @products %>
+  <div class="clearfix"></div>
+</div>
+<%= will_paginate @products %>
