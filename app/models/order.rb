@@ -14,6 +14,13 @@ class Order < ActiveRecord::Base
     self.tax_amount = subtotal * 0.16
     self.total = subtotal + tax_amount
   end
+
+  def send_confirmation
+    Notifier.purchase_confirmation(self).deliver
+  end
+  handle_asynchronously :send_confirmation, :run_at => Proc.new { 10.seconds.from_now }
+  # handle_asynchronously :send_confirmation
+
 end
 
 # cowork:

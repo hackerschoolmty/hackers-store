@@ -85,6 +85,9 @@ class OrdersController < ApplicationController
         @order.token = charge.id
         @order.paid!
         message = 'Order paid! thank you!'
+
+        @order.send_confirmation
+        session.delete(:order_id)
       else
         @order.failed!
       end

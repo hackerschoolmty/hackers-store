@@ -47,3 +47,8 @@ gem 'will_paginate'
 gem 'fancybox-rails'
 
 gem 'conekta'
+
+gem "letter_opener", :group => :development
+
+
+gem 'delayed_job_active_record'

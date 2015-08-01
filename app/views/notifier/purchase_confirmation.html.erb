@@ -1,0 +1,37 @@
+<h4>Hi <%= @order.user.name || @order.user.email %>,</h4>
+
+<h3>Thanks for your purchase.</h3>
+
+<h5>Order review:</h5>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Product</th>
+      <th>Unit price</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |item| %>
+      <tr id="order-item-<%= item.id %>">
+        <td><%= item.quantity %></td>
+        <td><%= item.product.name %></td>
+        <td><%= item.unit_price %></td>
+        <td><%= number_to_currency item.subtotal %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan='3'>Taxes</td>
+      <td id="tax-amount"><%= number_to_currency @order.tax_amount %></td>
+    </tr>
+    <tr>
+      <td colspan='3'></td>
+      <td id="order-total"><%= number_to_currency(@order.total) %></td>
+    </tr>
+  </tbody>
+
+</table>
+
+<h3>Order confirmation id #<%= @order.token %></h3>
