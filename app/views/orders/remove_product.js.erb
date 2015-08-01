@@ -1,0 +1,5 @@
+$('#order-item-<%= @order_item.id %>').fadeOut(1000, function(){
+  $(this).remove();
+  $('#tax-amount').html("<%= number_to_currency @order.tax_amount %>");
+  $('#order-total').html("<%= number_to_currency @order.total %>");
+});

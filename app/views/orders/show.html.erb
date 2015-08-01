@@ -5,47 +5,54 @@
     <tr>
       <th>Quantity</th>
       <th>Product</th>
+      <th>Unit price</th>
       <th>Price</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <% @total = 0 %>
     <% @order.order_items.each do |item| %>
-      <tr>
+      <tr id="order-item-<%= item.id %>">
+        <td><%= item.quantity %></td>
+        <td><%= item.product.name %></td>
+        <td><%= item.unit_price %></td>
+        <td><%= number_to_currency item.subtotal %></td>
         <td>
-          <%= item.quantity %>
-        </td>
-        <td>
-          <%= item.product.name %>
-        </td>
-        <td>
-          (<%= item.product.price %>)
-           <% item_sub = item.quantity * item.product.price %>
-           <%= number_to_currency item_sub %>
+          <%= link_to "Remove item",
+              remove_product_orders_path(item_id: item.id, format: :js),
+              method: :post,
+              data: { confirm: 'Are you sure?'},
+              remote: true
+              %>
         </td>
       </tr>
-      <% @total += item_sub  %>
     <% end %>
     <tr>
-      <td colspan='2'>
-        Taxes
-      </td>
-      <td>
-        <% iva = (@total * 0.16).to_f %>
-        <%= iva %>
-      </td>
+      <td colspan='3'>Taxes</td>
+      <td id="tax-amount"><%= number_to_currency @order.tax_amount %></td>
     </tr>
     <tr>
-      <td colspan='2'></td>
-      <td><%= number_to_currency(@total + iva) %></td>
+      <td colspan='3'></td>
+      <td id="order-total"><%= number_to_currency(@order.total) %></td>
     </tr>
-
-
   </tbody>
 
 
 </table>
 
+<div class="row">
+  <div class="col-xs-8 text-right">
+    <%= link_to 'Continue shoping', root_path %>
+  </div>
+  <div class="col-xs-4 text-right">
+    <% if user_signed_in? %>
+      <%= link_to 'Checkout', pay_orders_path, class: 'btn btn-success btn-large btn-block fancybox' %>
+    <% else %>
+      <%= link_to 'Checkout', new_user_session_path, class: 'btn btn-success btn-large btn-block' %>
+    <% end %>
+
+  </div>
+
+</div>
 
 
-<%= link_to 'Continue shoping', root_path %>

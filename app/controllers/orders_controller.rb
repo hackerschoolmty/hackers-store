@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :remove_product, :pay, :process_payment]
 
   # GET /orders
   # GET /orders.json
@@ -20,7 +20,24 @@ class OrdersController < ApplicationController
     else
       @order.order_items.create(product_id: params[:product_id])
     end
-    redirect_to order_path(@order), notice: "Orden creada" and return
+    redirect_to cart_path, notice: "Order created successfully" and return
+  end
+
+  def remove_product
+    # render json: @order
+    @order_item = @order.order_items.find(params[:item_id])
+
+    respond_to do |format|
+      if @order_item.destroy
+        @order.reload
+        @order.compute_total
+        @order.save
+        format.js {}
+      else
+        format.js {}
+      end
+    end
+
   end
 
   # GET /orders/1
@@ -28,59 +45,76 @@ class OrdersController < ApplicationController
   def show
   end
 
-  # GET /orders/new
-  def new
-    @order = Order.new
+  def pay
+    render layout: false if request.xhr?
   end
 
-  # GET /orders/1/edit
-  def edit
-  end
+  def process_payment
 
-  # POST /orders
-  # POST /orders.json
-  def create
-    @order = Order.new(order_params)
+    Conekta.locale = :es
+    Conekta.api_key = 'key_7GHCfFiCEFi1FEMhpn2KTw'
 
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
-        format.json { render :show, status: :created, location: @order }
-      else
-        format.html { render :new }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
+    begin
+
+      line_items = []
+      @order.order_items.each do |item|
+        line_items << {
+          "name" => item.product.name,
+          "description" => item.product.description,
+          "unit_price" => item.unit_price*100,
+          "quantity" => item.quantity,
+          "sku" => item.product_id,
+          "type" => "product-purchase"
+        }
+
       end
-    end
-  end
 
-  # PATCH/PUT /orders/1
-  # PATCH/PUT /orders/1.json
-  def update
-    respond_to do |format|
-      if @order.update(order_params)
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order }
+      charge = Conekta::Charge.create({
+        amount: @order.total*100,
+        currency: "MXN",
+        description: "Lorem ipsum",
+        reference_id: "#{@order.id}-#{current_user.id}-#{Time.now.to_i}",
+        card: params[:conektaTokenId],
+        details: {
+          email: current_user.email,
+          line_items: line_items
+        }
+      })
+
+      if charge.status == 'paid'
+        @order.token = charge.id
+        @order.paid!
+        message = 'Order paid! thank you!'
       else
-        format.html { render :edit }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
+        @order.failed!
       end
-    end
-  end
 
-  # DELETE /orders/1
-  # DELETE /orders/1.json
-  def destroy
-    @order.destroy
-    respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
-      format.json { head :no_content }
+
+    rescue Conekta::ParameterValidationError => e
+      message = e.message
+      #alguno de los parámetros fueron inválidos
+    rescue Conekta::ProcessingError => e
+      message = e.message
+      #la tarjeta no pudo ser procesada
+    rescue Conekta::Error => e
+      message = e.message
+      #un error ocurrió que no sucede en el flujo normal de cobros como por ejemplo un auth_key incorrecto
     end
+
+
+    redirect_to root_path, notice: message
+
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
-      @order = Order.find(params[:id])
+      @order = if session[:order_id].present?
+        Order.find(session[:order_id])
+      else
+        Order.find(params[:id])
+      end
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

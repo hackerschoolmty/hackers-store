@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   rolify
 
+  has_many :orders
+
   enum role: [:customer, :admin]
 
   after_initialize :set_default_role, :if => :new_record?

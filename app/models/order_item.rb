@@ -1,18 +1,23 @@
 class OrderItem < ActiveRecord::Base
+
   belongs_to :order
   belongs_to :product
 
-  # before_create :compute_subtotal
 
-  # after_save :compute_order_total
+  before_save :compute_subtotal
+  after_destroy :update_order
 
-  # def compute_subtotal
-  #   self.subtotal = self.product.price * self.quantity
-  # end
+  after_save :update_order
 
 
-  # def compute_order_total
-  #   self.order.order_items.map { |oi|   }
-  #   self.order.update_attributes()
-  # end
+  def compute_subtotal
+    self.unit_price = product.price
+    self.subtotal = unit_price * quantity
+  end
+
+  def update_order
+    self.order.compute_total
+    self.order.save
+  end
+
 end

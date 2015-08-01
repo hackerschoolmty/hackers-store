@@ -6,9 +6,19 @@ class ApplicationController < ActionController::Base
   before_action :current_order
 
   def current_order
-    if session[:order_id]
-      Order.find(session[:order_id])
+    if user_signed_in? && current_user.orders.pending.first
+      session[:order_id] = current_user.orders.pending.first.id
     end
+
+
+    if session[:order_id]
+      order = Order.find(session[:order_id])
+      if user_signed_in? && order && order.user_id.blank?
+        order.update_attribute(:user_id, current_user.id)
+      end
+      order
+    end
+
   end
   helper_method :current_order
 end

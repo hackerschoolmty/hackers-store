@@ -1,14 +1,22 @@
 class Order < ActiveRecord::Base
-  belongs_to :user
-
-  has_many :order_items
 
   before_save :compute_total
+  before_update :compute_total
+
+  belongs_to :user
+
+  has_many :order_items, dependent: :destroy
+
+  enum status: [:pending, :paid, :failed]
 
   def compute_total
-    if self.order_items
-      sum = 0
-      self.order_items.map { |oi| sum += oi.quantity * oi.product.price }
-    end
+    self.subtotal = order_items.sum(:subtotal)
+    self.tax_amount = subtotal * 0.16
+    self.total = subtotal + tax_amount
   end
 end
+
+# cowork:
+# huskysea178
+# cowork-guest:
+# huskysea179

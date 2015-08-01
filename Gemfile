@@ -43,3 +43,7 @@ gem 'bootstrap-sass', '~> 3.3.5'
 gem "rolify"
 
 gem 'will_paginate'
+
+gem 'fancybox-rails'
+
+gem 'conekta'
