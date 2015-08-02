@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
 
   end
-  get '/cart', to: 'orders#show', id: 'current'
+  get '/cart', to: 'orders#show'
   resources :products
   root to: 'products#index'
   devise_for :users
