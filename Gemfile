@@ -18,6 +18,7 @@ group :development do
   gem 'quiet_assets'
   gem 'rails_layout'
   gem 'spring-commands-rspec'
+  gem 'letter_opener'
 end
 
 group :development, :test do
@@ -27,7 +28,6 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'sqlite3'
   gem 'rubocop', require: false
-  gem 'letter_opener'
 end
 
 group :production do
@@ -50,3 +50,5 @@ gem 'will_paginate'
 gem 'fancybox-rails'
 gem 'conekta'
 gem 'delayed_job_active_record'
+gem 'mini_magick'
+gem 'carrierwave'

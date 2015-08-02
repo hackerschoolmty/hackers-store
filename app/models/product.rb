@@ -21,6 +21,8 @@ class Product < ActiveRecord::Base
   belongs_to :author, inverse_of: :products, class_name: 'User',
                       foreign_key: 'author_id'
 
+  mount_uploader :product_photo, ProductPhotoUploader
+
   def ensure_slug
     self.slug = name.parameterize if slug.blank?
   end
