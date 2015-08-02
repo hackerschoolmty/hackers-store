@@ -52,3 +52,6 @@ gem "letter_opener", :group => :development
 
 
 gem 'delayed_job_active_record'
+
+gem 'mini_magick'
+gem 'carrierwave'

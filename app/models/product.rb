@@ -4,6 +4,8 @@ class Product < ActiveRecord::Base
 
   validates :price, :stock, numericality: true
 
+  mount_uploader :product_photo, ProductPhotoUploader
+
   def ensure_slug
     self.slug = self.name.parameterize if self.slug.blank?
   end
