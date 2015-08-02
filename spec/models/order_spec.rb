@@ -31,4 +31,16 @@ RSpec.describe Order, type: :model do
   context "associations" do
     it { is_expected.to belong_to(:user) }
   end
+
+  context 'methods' do
+    describe '#compute_total' do
+      it 'should update subtotal, tax_amount, total' do
+        product = create :product, price: 100
+        order = create(:order_item, product: product).order
+        expect(order.subtotal).to eq 100
+        expect(order.tax_amount).to eq 16
+        expect(order.total).to eq 116
+      end
+    end
+  end
 end

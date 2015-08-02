@@ -2,15 +2,16 @@
 #
 # Table name: products
 #
-#  id          :integer          not null, primary key
-#  name        :string
-#  description :text
-#  price       :decimal(, )
-#  stock       :integer
-#  author_id   :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  slug        :string
+#  id            :integer          not null, primary key
+#  name          :string
+#  description   :text
+#  price         :decimal(, )
+#  stock         :integer
+#  author_id     :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  slug          :string
+#  product_photo :string
 #
 
 require 'rails_helper'
@@ -36,5 +37,14 @@ RSpec.describe Product, type: :model do
 
   context "associations" do
     it { is_expected.to belong_to(:author) }
+  end
+  
+  context 'methods' do
+    describe '#ensure_slug' do
+      it 'should create a slug for product' do
+        product = create :product, name: 'my product'
+        expect(product.slug).to eq 'my-product'
+      end
+    end
   end
 end

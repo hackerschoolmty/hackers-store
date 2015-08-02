@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
     else
       @order.order_items.create(product_id: params[:product_id])
     end
-    redirect_to cart_path, notice: 'Product added' && return
+    redirect_to cart_path, notice: 'Product added' and return
   end
 
   def remove_product
@@ -43,13 +43,13 @@ class OrdersController < ApplicationController
     line_items = []
     @order.order_items.each { |item| line_items << item_hash(item) }
 
-    cp = ConektaPayment.new(
+    @cp = ConektaPayment.new(
       order: @order, line_items: line_items, current_user: current_user,
       conektaTokenId: params[:conektaTokenId]
     )
-    session.delete(:order_id) if cp.status
+    session.delete(:order_id) if @cp.status
 
-    redirect_to root_path, notice: cp.message
+    redirect_to root_path, notice: @cp.message
   end
 
   private

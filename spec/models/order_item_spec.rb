@@ -31,4 +31,31 @@ RSpec.describe OrderItem, type: :model do
     it { is_expected.to belong_to(:order) }
     it { is_expected.to belong_to(:product) }
   end
+
+  context 'methods' do
+    describe '#compute_subtotal' do
+      it 'should update subtotal' do
+        product = create :product, price: 100
+        oi = create(:order_item, product: product)
+        expect(oi.subtotal).to eq 100
+      end
+    end
+
+    describe '#update_order' do
+      it 'should update order total after save' do
+        product = create :product, price: 100
+        oi = create(:order_item, product: product)
+        expect(oi.order.total).to eq 116
+      end
+      
+      it 'should update order total after destroy' do
+        product = create :product, price: 100
+        order = create(:order_item, product: product).order
+        order.order_items.first.destroy
+        expect(order.subtotal).to eq 0
+        expect(order.tax_amount).to eq 0
+        expect(order.total).to eq 0
+      end
+    end
+  end
 end

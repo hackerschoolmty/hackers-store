@@ -2,16 +2,18 @@
 #
 # Table name: products
 #
-#  id          :integer          not null, primary key
-#  name        :string
-#  description :text
-#  price       :decimal(, )
-#  stock       :integer
-#  author_id   :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  slug        :string
+#  id            :integer          not null, primary key
+#  name          :string
+#  description   :text
+#  price         :decimal(, )
+#  stock         :integer
+#  author_id     :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  slug          :string
+#  product_photo :string
 #
+
 class Product < ActiveRecord::Base
   before_create :ensure_slug
 

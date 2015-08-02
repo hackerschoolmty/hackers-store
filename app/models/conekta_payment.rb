@@ -8,6 +8,9 @@ class ConektaPayment
     @line_items = args[:line_items]
     @current_user = args[:current_user]
     @conekta_token_id = args[:conektaTokenId]
+    Conekta.locale = :es
+    Conekta.api_key = 'key_7GHCfFiCEFi1FEMhpn2KTw'
+    pay
   end
 
   def pay
@@ -34,8 +37,6 @@ class ConektaPayment
   end
 
   def conekta
-    Conekta.locale = :es
-    Conekta.api_key = 'key_7GHCfFiCEFi1FEMhpn2KTw'
     Conekta::Charge.create(
       amount: @order.total * 100, currency: 'MXN', description: 'Lorem ipsum',
       reference_id: "#{@order.id}-#{@current_user.id}-#{Time.now.to_i}",
@@ -44,7 +45,7 @@ class ConektaPayment
   end
 
   def update_order
-    @order.token = charge.id
+    @order.token = conekta.id
     @order.paid!
     @message = 'Order paid! thank you!'
     @order.send_confirmation

@@ -14,7 +14,7 @@
 #
 class Order < ActiveRecord::Base
   before_save :compute_total
-  before_update :compute_total
+  # before_update :compute_total
 
   belongs_to :user
 

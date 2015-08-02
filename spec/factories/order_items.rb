@@ -17,5 +17,6 @@ FactoryGirl.define do
     order
     product
     quantity 1
+    unit_price { Faker::Commerce.price }
   end
 end

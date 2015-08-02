@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ProductsController, type: :controller do
-
   describe 'GET index' do
     it 'it should return list of products' do
       create_list :product, 10

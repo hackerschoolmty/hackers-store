@@ -28,6 +28,7 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'sqlite3'
   gem 'rubocop', require: false
+  gem 'pry-rails'
 end
 
 group :production do
